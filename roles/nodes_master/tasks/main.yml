@@ -1,0 +1,50 @@
+# TODO
+# curl -sSL https://get.rvm.io | bash -s stable
+#    33  vi .bash_profile
+#    51  rvm install 2.1.2
+#    54  rvm gemset install latest
+#    58  rvm gemset create fizzingpanda
+#    59  rvm gemset use fizzingpanda
+#    60  gem install capistrano -v 2.9.0
+
+---
+- name: Install RubyGems
+  apt: name=rubygems state=present
+  sudo: yes
+
+- name: Install Capistrano Gem.  Version 2.9 works!!!
+  shell: gem install capistrano -v 2.9.0
+  sudo: yes
+
+- name: Download Hypertable vesion 0.9.8
+  get_url: url=http://cdn.hypertable.com/packages/0.9.8.0/hypertable-0.9.8.0-linux-x86_64.rpm dest=/home/hadoop/ owner=hadoop group=hadoop mode=0777
+  sudo: yes
+
+# - name: Unarchive Hypertable archive
+#   unarchive: src=/home/hadoop/hypertable-0.9.8.0-linux-x86_64.tar.bz2 dest=/home/hadoop copy=no
+
+- name: Build cluster management Capfile User Configs
+  template:
+    src: Capfile.user_config.json.j2
+    dest: "/home/hadoop/Capfile"
+
+- name: Append cluster management Capfile with defaults.
+  lineinfile:
+    dest: /home/hadoop/Capfile
+    insertafter: EOF
+    line: "{{ lookup('file', 'Capfile.cluster') }}"
+
+- name: Create Hypertable Directory /etc/opt/hypertable
+  file: path=/etc/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
+  sudo: yes
+
+- name: Create Hypertable Directory /var/opt/hypertable
+  file: path=/var/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
+  sudo: yes
+
+# TODO:  Complete testing on nodes
+- name: Copy Master ssh public key to local
+  fetch:
+    src: /home/hadoop/.ssh/id_rsa.pub
+    dest: "./ssh/files/id_rsa.pub"
+    flat: yes

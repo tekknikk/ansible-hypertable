@@ -1,0 +1,15 @@
+---
+- name: Get the clusters status from AWS CLI
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr describe-cluster
+           --cluster-id j-2WZGQVJD0ONKB
+           --profile usp
+  register: describe_cluster_cli
+
+- debug: var=describe_cluster_cli
+  tags:
+    - debug
+
+- debug: var=describe_cluster_cli.Cluster.Status.State

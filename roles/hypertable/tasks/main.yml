@@ -1,0 +1,21 @@
+---
+- name: Installing Hypertable RPM
+  shell: cap install_package
+
+- name: Copying Hypertable binaries to cluster nodes
+  shell: cap dist
+
+- name: FHS-ize the installation FHS-ize the installation 
+  shell: cap fhsize
+
+- name: Set "current" link
+  shell: cap set_current
+
+- name: Create Hypertable Config file
+  template: 
+    src: hypertable.cfg
+    dest: "/opt/hypertable/hypertable.json.j2"
+
+- name: Copying Hypertable binaries to cluster nodes
+  shell: cap push_config
+

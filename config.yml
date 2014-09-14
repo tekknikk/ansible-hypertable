@@ -1,0 +1,8 @@
+---
+- name: Build Hypertable
+  hosts: masters
+  user: hadoop
+  sudo: True
+  gather_facts: false
+  roles:
+    - hypertable

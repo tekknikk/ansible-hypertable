@@ -1,0 +1,13 @@
+[
+{% for item in masters.Instances %}
+{
+    "private_dns_name": "master{{loop.index}}",
+    "id": "{{ item.Ec2InstanceId }}",
+    "private_dns": "{{ item.PrivateDnsName }}",
+    "private_ip": "{{ item.PrivateIpAddress }}",
+    "public_dns": "{{ item.PublicDnsName }}",
+    "public_ip": "{{ item.PublicIpAddress }}",
+    "status": "{{item.Status.State}}"
+}
+{% endfor %}
+]

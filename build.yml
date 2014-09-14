@@ -1,0 +1,53 @@
+---
+- name: Build AWS EMR Cluster
+  hosts: local
+  user: teknik
+  sudo: false
+  gather_facts: false
+  roles:
+    - emr
+
+- name: Configure each Master Node for Hypertable
+  hosts: cluster_master
+  user: hadoop
+  sudo: false
+  gather_facts: false
+  vars:
+     etc_hosts: "{{ lookup('file', './pandaM3_etc_hosts') }}"
+  roles:
+    - dns
+    - nodes_master
+
+- name: Configure each CORE Node for Hypertable
+  hosts: cluster_cores
+  user: hadoop
+  sudo: false
+  gather_facts: false
+  vars:
+     etc_hosts: "{{ lookup('file', './pandaM3_etc_hosts') }}"
+  roles:
+    - dns
+    - ssh
+    - nodes_core
+
+- name: Configure each CORE Node for Hypertable
+  hosts: cluster_tasks
+  user: hadoop
+  sudo: false
+  gather_facts: false
+  vars:
+     etc_hosts: "{{ lookup('file', './pandaM3_etc_hosts') }}"
+  roles:
+    - dns
+    - ssh
+    - nodes_task
+
+- name: Build Hypertable on Master1
+  hosts: cluster_master
+  user: hadoop
+  sudo: false
+  gather_facts: false
+  vars:
+     etc_hosts: "{{ lookup('file', './pandaM3_etc_hosts') }}"
+  roles:
+    - hypertable

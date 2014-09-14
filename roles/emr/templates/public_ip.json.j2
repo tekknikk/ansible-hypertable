@@ -1,0 +1,20 @@
+[masters]
+{% for item in masters.Instances %}
+{% if item.PublicIpAddress is defined -%}
+{{ item.PublicIpAddress }} ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
+{% endif %}
+{% endfor %}
+
+[cores]
+{% for item in cores.Instances %}
+{% if item.PublicIpAddress is defined -%}
+{{ item.PublicIpAddress }} ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
+{% endif %}
+{% endfor %}
+
+[tasks]
+{% for item in tasks.Instances %}
+{% if item.PublicIpAddress is defined -%}
+{{ item.PublicIpAddress }} ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
+{% endif %}
+{% endfor %}

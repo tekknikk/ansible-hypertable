@@ -1,0 +1,164 @@
+# TODO: need following tasks:  check cluster build status until "waiting" then get roles and ip address's.  need to parse json from aws cli.
+---
+# - name: Turn off ansible host checking on local
+#   sudo: no
+#   local_action: >
+#     shell export ANSIBLE_HOST_KEY_CHECKING=False
+
+# - name: Create EMR Cluster and register it's ID 
+#   local_action:
+#     module: aws_cli
+#     commandline: >
+#       emr create-cluster
+#           --name pandaM3
+#           --ec2-attributes KeyName=pandahard
+#           --ami-version 2.4.2
+#           --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m1.large InstanceGroupType=CORE,InstanceCount=1,InstanceType=m1.large InstanceGroupType=TASK,InstanceCount=2,InstanceType=m1.large
+#           --enable-debugging
+#           --log-uri "s3://pandahard/"
+#           --applications Name=MapR,Args=--edition,m3,--version,3.1.1
+#           --profile usp
+#   register: create_cluster
+# - debug: var=create_cluster
+#   tags:
+#     - debug
+
+# --cluster-id create_cluster.ClusterId
+- name: Wait for EMR Cluster to start
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr describe-cluster
+           --cluster-id j-158DP86K6L9JI
+           --profile {{aws_cli_profile}}
+  register: describe_cluster
+  ignore_errors: true
+  until: >
+    describe_cluster.Cluster.Status.State == "WAITING"
+  retries: 20
+  delay: 30
+
+- name: Get instance details for MASTERs
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr list-instances
+           --cluster-id j-158DP86K6L9JI
+           --instance-group-types MASTER
+           --profile {{aws_cli_profile}}
+  register: masters
+- debug: var=masters
+  tags:
+    - debug
+
+- name: Get instance details for CORES
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr list-instances
+           --cluster-id j-158DP86K6L9JI
+           --instance-group-types CORE
+           --profile {{aws_cli_profile}}
+  register: cores
+- debug: var=cores
+  tags:
+    - debug
+
+- name: Get instance details for TASKS
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr list-instances
+           --cluster-id j-158DP86K6L9JI
+           --instance-group-types TASK
+           --profile {{aws_cli_profile}}
+  register: tasks
+- debug: var=tasks
+  tags:
+    - debug
+
+- name: Store ansible host file for cluster public IP's
+  local_action:
+    module: template
+    src: public_ip.json.j2
+    dest: "./{{cluster_name}}.hosts"
+
+- name: Store clusters private IP's for updating each nodes /etc/hosts
+  local_action:
+    module: template
+    src: private_ip.json.j2
+    dest: "./{{cluster_name}}_etc_hosts"
+
+- name: Store MASTERS var
+  local_action:
+    module: template
+    src: cluster_masters.json.j2
+    dest: "./{{cluster_name}}_masters"
+
+- name: Store CORES var
+  local_action:
+    module: template
+    src: cluster_cores.json.j2
+    dest: "./{{cluster_name}}_cores"
+
+- name: Store TASKS var
+  local_action:
+    module: template
+    src: cluster_tasks.json.j2
+    dest: "./{{cluster_name}}_tasks"
+
+- name: Add first MASTER (master1) public IP to host group @cluster_master
+  local_action:
+    module: add_host
+    groups: cluster_master
+    hostname: "{{masters.Instances[0].PublicIpAddress}}"
+    ansible_connection: ssh
+    ansible_ssh_user: "hadoop"
+    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+
+- name: Add MASTER public IPs to host group @cluster_masters
+  local_action:
+    module: add_host
+    groups: cluster_masters
+    hostname: "{{item.PublicIpAddress}}"
+    ansible_connection: ssh
+    ansible_ssh_user: "hadoop"
+    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+  with_items: masters.Instances
+
+- name: Add CORE public IPs to host group @cluster_cores
+  local_action:
+    module: add_host
+    groups: cluster_hyperspace
+    hostname: "{{masters.Instances[0].PublicIpAddress}}"
+    ansible_connection: ssh
+    ansible_ssh_user: "hadoop"
+    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+  with_items: cores.Instances
+
+- name: Add TASK public IP to host group @cluster_tasks
+  local_action:
+    module: add_host
+    groups: cluster_tasks
+    hostname: "{{item.PublicIpAddress}}"
+    ansible_connection: ssh
+    ansible_ssh_user: "hadoop"
+    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+  with_items: tasks.Instances
+
+
+- name: Enable SSH access to CORES but ignore error if exists
+  ignore_errors: yes
+  local_action:
+    module: aws_cli
+    commandline: >
+      ec2 authorize-security-group-ingress
+           --group-name ElasticMapReduce-slave
+           --protocol tcp
+           --port 22
+           --cidr 0.0.0.0/0
+           --profile {{aws_cli_profile}}
+  register: authorize_ssh
+- debug: var=authorize_ssh
+  tags:
+    - debug

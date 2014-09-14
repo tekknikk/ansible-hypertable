@@ -1,0 +1,6 @@
+---
+- name: Copy MASTER ssh authorised key to node
+  authorized_key:
+    user: hadoop
+    key: "{{ lookup('file', 'id_rsa.pub') }}"
+    manage_dir: no

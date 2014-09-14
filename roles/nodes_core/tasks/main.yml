@@ -1,0 +1,6 @@
+---
+- name: Create Hypertable Directory /etc/opt/hypertable
+  file: path=/etc/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
+
+- name: Create Hypertable Directory /var/opt/hypertable
+  file: path=/var/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes

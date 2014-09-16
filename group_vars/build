@@ -1,6 +1,6 @@
 ---
 profile: usp
-name: pandaM3
+name: panda
 keyname: pandahard
 type: m1.large
 masters: 1
@@ -9,5 +9,6 @@ tasks: 2
 mapr_edition: m3
 mapr_version: 3.1.1
 ami-version: 2.4.2
+data: some_ebs_volume_id
 
 

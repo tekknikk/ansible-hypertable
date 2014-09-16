@@ -1,11 +1,11 @@
 [
 {
     "private_dns_name": "master1",
-    "id": "i-2c496612",
-    "private_dns": "ip-10-248-209-188.ap-southeast-2.compute.internal",
-    "private_ip": "10.248.209.188",
-    "public_dns": "ec2-54-253-36-107.ap-southeast-2.compute.amazonaws.com",
-    "public_ip": "54.253.36.107",
+    "id": "i-d85877e6",
+    "private_dns": "ip-10-248-40-69.ap-southeast-2.compute.internal",
+    "private_ip": "10.248.40.69",
+    "public_dns": "ec2-54-253-59-104.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.253.59.104",
     "status": "RUNNING"
 }
 ]

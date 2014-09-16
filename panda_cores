@@ -1,0 +1,11 @@
+[
+{
+    "private_dns_name": "core1",
+    "id": "i-0d2c0333",
+    "private_dns": "ip-10-248-58-84.ap-southeast-2.compute.internal",
+    "private_ip": "10.248.58.84",
+    "public_dns": "ec2-54-252-69-233.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.252.69.233",
+    "status": "RUNNING"
+}
+]

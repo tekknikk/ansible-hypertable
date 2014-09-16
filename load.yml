@@ -1,8 +1,9 @@
 ---
-- name: Test Hypertable
+- name: Load ALL FP data from ebs mount
   hosts: masters
   user: hadoop
   sudo: false
   gather_facts: false
   roles:
-    - test
+    - ec2
+    - load

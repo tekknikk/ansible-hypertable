@@ -1,6 +1,6 @@
 ---
 - name: Installing Hypertable RPM
-  shell: cap install_package
+  command: cap install_package
 
 - name: Copying Hypertable binaries to cluster nodes
   shell: cap dist
@@ -13,9 +13,12 @@
 
 - name: Create Hypertable Config file
   template: 
-    src: hypertable.cfg
-    dest: "/opt/hypertable/hypertable.json.j2"
+    src: hypertable.json.j2
+    dest: "/opt/hypertable/hypertable.cfg"
 
 - name: Copying Hypertable binaries to cluster nodes
   shell: cap push_config
+
+- name: Start Hypertable!
+  shell: cap start
 

@@ -8,13 +8,34 @@
 #    60  gem install capistrano -v 2.9.0
 
 ---
+# - name: Install RVM
+#   shell: curl -sSL https://get.rvm.io | bash -s stable
+#   sudo: yes
+
+# - name: Install Ruby
+#   shell: 
+
 - name: Install RubyGems
   apt: name=rubygems state=present
   sudo: yes
 
-- name: Install Capistrano Gem.  Version 2.9 works!!!
-  shell: gem install capistrano -v 2.9.0
-  sudo: yes
+- name: Install Capistrano gem
+  gem:
+    name: capistrano
+    version: 2.9.0
+    state: present
+
+- name: Update hadoop user shell with cap binary path
+
+  sudo: no
+  lineinfile:
+    dest: /home/hadoop/.bashrc
+    insertafter: EOF
+    line: 'export PATH="$PATH:/home/hadoop/.gem/ruby/1.8/bin/"'
+
+# - name: Install Capistrano Gem.  Version 2.9 works!!!
+#   shell: gem install capistrano -v 2.9.0
+#   sudo: yes
 
 - name: Download Hypertable vesion 0.9.8
   get_url: url=http://cdn.hypertable.com/packages/0.9.8.0/hypertable-0.9.8.0-linux-x86_64.rpm dest=/home/hadoop/ owner=hadoop group=hadoop mode=0777
@@ -23,16 +44,18 @@
 # - name: Unarchive Hypertable archive
 #   unarchive: src=/home/hadoop/hypertable-0.9.8.0-linux-x86_64.tar.bz2 dest=/home/hadoop copy=no
 
-- name: Build cluster management Capfile User Configs
-  template:
-    src: Capfile.user_config.json.j2
-    dest: "/home/hadoop/Capfile"
+- name: Copy default section of Capfile
+  copy:
+    src: Capfile.cluster
+    dest: /home/hadoop/Capfile
+    owner: hadoop
+    group: hadoop
 
-- name: Append cluster management Capfile with defaults.
+- name: Append cluster management capfile User Configs
   lineinfile:
     dest: /home/hadoop/Capfile
-    insertafter: EOF
-    line: "{{ lookup('file', 'Capfile.cluster') }}"
+    insertbefore: BOF
+    line: "{{ lookup('file', 'Capfile.user_config.json.j2') }}"
 
 - name: Create Hypertable Directory /etc/opt/hypertable
   file: path=/etc/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
@@ -42,9 +65,16 @@
   file: path=/var/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
   sudo: yes
 
+- name: Create Hypertable Directory /opt/hypertable
+  file: path=/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
+  sudo: yes
+
 # TODO:  Complete testing on nodes
 - name: Copy Master ssh public key to local
   fetch:
-    src: /home/hadoop/.ssh/id_rsa.pub
-    dest: "./ssh/files/id_rsa.pub"
+    src: /home/hadoop/.ssh/id_rsa
+    dest: "./roles/ssh/files/id_rsa"
     flat: yes
+
+
+

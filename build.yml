@@ -1,6 +1,6 @@
 ---
 - name: Build AWS EMR Cluster
-  hosts: local
+  hosts: build
   user: teknik
   sudo: false
   gather_facts: false

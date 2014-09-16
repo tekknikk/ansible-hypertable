@@ -1,0 +1,8 @@
+---
+- name: Test Hypertable
+  hosts: master
+  user: teknik
+  sudo: false
+  gather_facts: false
+  roles:
+    - emr

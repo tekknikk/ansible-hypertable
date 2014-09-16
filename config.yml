@@ -2,7 +2,7 @@
 - name: Build Hypertable
   hosts: masters
   user: hadoop
-  sudo: True
+  sudo: False
   gather_facts: false
   roles:
-    - hypertable
+    - test

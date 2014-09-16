@@ -1,0 +1,22 @@
+# 1) create database
+# 2)load schema
+# 3) load table data
+# 4) backup table
+---
+---
+- name: Create directory for test_data files
+  file: path=/home/hadoop/test owner=hadoop group=hadoop state=directory recurse=yes
+
+- name: Unarchive DATA files to master1
+  unarchive:
+    src: counts1.tar.gz
+    dest: /home/hadoop/test
+
+- name: Load Panda DB Schema
+  shell: cat /home/hadoop/test/counts1/schema.hql | /opt/hypertable/current/bin/ht shell
+
+- name: Load data into Count1 table
+  shell: cat /home/hadoop/test/counts1/count1_load.hql | /opt/hypertable/current/bin/ht shell
+
+#- name: Backup table xxx
+#  shell:

@@ -1,27 +1,27 @@
 # TODO: need following tasks:  check cluster build status until "waiting" then get roles and ip address's.  need to parse json from aws cli.
 ---
-# - name: Turn off ansible host checking on local
-#   sudo: no
-#   local_action: >
-#     shell export ANSIBLE_HOST_KEY_CHECKING=False
+- name: Turn off ansible host checking on local
+  sudo: no
+  local_action: >
+    shell export ANSIBLE_HOST_KEY_CHECKING=False
 
-# - name: Create EMR Cluster and register it's ID 
-#   local_action:
-#     module: aws_cli
-#     commandline: >
-#       emr create-cluster
-#           --name pandaM3
-#           --ec2-attributes KeyName=pandahard
-#           --ami-version 2.4.2
-#           --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m1.large InstanceGroupType=CORE,InstanceCount=1,InstanceType=m1.large InstanceGroupType=TASK,InstanceCount=2,InstanceType=m1.large
-#           --enable-debugging
-#           --log-uri "s3://pandahard/"
-#           --applications Name=MapR,Args=--edition,m3,--version,3.1.1
-#           --profile usp
-#   register: create_cluster
-# - debug: var=create_cluster
-#   tags:
-#     - debug
+- name: Create EMR Cluster and register it's ID 
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr create-cluster
+          --name {{name}}
+          --ec2-attributes KeyName={{keyname}}
+          --ami-version 2.4.2
+          --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
+          --enable-debugging
+          --log-uri "s3://pandahard/"
+          --applications Name=MapR,Args=--edition,{{mapr_edition}},--version,{{mapr_version}}
+          --profile {{profile}}
+  register: create_cluster
+- debug: var=create_cluster
+  tags:
+    - debug
 
 # --cluster-id create_cluster.ClusterId
 - name: Wait for EMR Cluster to start
@@ -29,23 +29,23 @@
     module: aws_cli
     commandline: >
       emr describe-cluster
-           --cluster-id j-158DP86K6L9JI
-           --profile {{aws_cli_profile}}
+           --cluster-id {{create_cluster.ClusterId}}
+           --profile {{profile}}
   register: describe_cluster
   ignore_errors: true
   until: >
     describe_cluster.Cluster.Status.State == "WAITING"
-  retries: 20
-  delay: 30
+  retries: 30
+  delay: 15
 
 - name: Get instance details for MASTERs
   local_action:
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-158DP86K6L9JI
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types MASTER
-           --profile {{aws_cli_profile}}
+           --profile {{profile}}
   register: masters
 - debug: var=masters
   tags:
@@ -56,9 +56,9 @@
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-158DP86K6L9JI
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types CORE
-           --profile {{aws_cli_profile}}
+           --profile {{profile}}
   register: cores
 - debug: var=cores
   tags:
@@ -69,9 +69,9 @@
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-158DP86K6L9JI
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types TASK
-           --profile {{aws_cli_profile}}
+           --profile {{profile}}
   register: tasks
 - debug: var=tasks
   tags:
@@ -81,31 +81,31 @@
   local_action:
     module: template
     src: public_ip.json.j2
-    dest: "./{{cluster_name}}.hosts"
+    dest: "./{{name}}.hosts"
 
 - name: Store clusters private IP's for updating each nodes /etc/hosts
   local_action:
     module: template
     src: private_ip.json.j2
-    dest: "./{{cluster_name}}_etc_hosts"
+    dest: "./{{name}}_etc_hosts"
 
 - name: Store MASTERS var
   local_action:
     module: template
     src: cluster_masters.json.j2
-    dest: "./{{cluster_name}}_masters"
+    dest: "./{{name}}_masters"
 
 - name: Store CORES var
   local_action:
     module: template
     src: cluster_cores.json.j2
-    dest: "./{{cluster_name}}_cores"
+    dest: "./{{name}}_cores"
 
 - name: Store TASKS var
   local_action:
     module: template
     src: cluster_tasks.json.j2
-    dest: "./{{cluster_name}}_tasks"
+    dest: "./{{name}}_tasks"
 
 - name: Add first MASTER (master1) public IP to host group @cluster_master
   local_action:
@@ -129,8 +129,8 @@
 - name: Add CORE public IPs to host group @cluster_cores
   local_action:
     module: add_host
-    groups: cluster_hyperspace
-    hostname: "{{masters.Instances[0].PublicIpAddress}}"
+    groups: cluster_cores
+    hostname: "{{cores.Instances[0].PublicIpAddress}}"
     ansible_connection: ssh
     ansible_ssh_user: "hadoop"
     ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
@@ -157,7 +157,7 @@
            --protocol tcp
            --port 22
            --cidr 0.0.0.0/0
-           --profile {{aws_cli_profile}}
+           --profile {{profile}}
   register: authorize_ssh
 - debug: var=authorize_ssh
   tags:

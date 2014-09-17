@@ -16,9 +16,8 @@
   sudo: yes
 
 - name: Configure Server Monitor daemon with license
-  shell: "nrsysmond-config --set license_key={{newrelic}}"
+  shell: "nrsysmond-config --set license_key={{build.newrelic}}"
   sudo: yes
-  when: newrelic is defined
 
 - name: Start the daemon
   shell: /etc/init.d/newrelic-sysmond start

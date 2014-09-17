@@ -51,7 +51,7 @@ This key needs to already exist.  Enter just the name and do not include the .pe
 
 TODO
 1) Describe build variables
-2) Use cluster hosts vars in Capfile.user_config.json.j2
+2) Templatize file Capfile.user_config.json.j2
 
 
 

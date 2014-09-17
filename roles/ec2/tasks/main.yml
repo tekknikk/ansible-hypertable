@@ -1,14 +1,27 @@
 ---
-- name: Attach ebs volume to master1
+- name: Attach data ebs volume to master1
   local_action:
     module: aws_cli
     commandline: >
       ec2 attach-volume
-          --volume-id vol-32482736
-          --instance-id {{  masters[0].InstanceID ??? }}
+          --volume-id vol-e1141fe5
+          --instance-id {{masters[0].id}}
           --device /dev/xvdf
           --profile {{profile}}
   register: attach_volume
+
 - debug: var=attach_volume
   tags:
     - debug
+
+- name: Create directory for data volume
+  file: path=/data owner=hadoop group=hadoop state=directory recurse=yes
+  sudo: yes
+
+- name: Mount data ebs volume on master1
+  mount:
+    name: /data
+    src: /dev/xvdf
+    fstype: ext4
+    state: mounted
+  sudo: yes

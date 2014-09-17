@@ -29,4 +29,4 @@
     mode: 0777
 
 - name: Backup data from table Count1
-  shell: /home/hadoop/test/backup.sh data_test counts1
+  shell: ./backup.sh data_test counts1 chdir=/home/hadoop/test

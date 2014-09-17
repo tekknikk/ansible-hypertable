@@ -20,7 +20,7 @@
   shell: cap push_config
 
 - name: Start hyperspace
-  shell: cap start_hypersapce
+  shell: cap start_hyperspace
 
 # TODO: Master starts HOWEVER errors out because monitoring fails to start
 - name: Start master

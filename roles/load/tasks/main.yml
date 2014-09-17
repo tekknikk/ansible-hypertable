@@ -1,11 +1,17 @@
-- name: Load Panda DB Schema
-  shell: cat /data/panda/schema.hql | /opt/hypertable/current/bin/ht shell
+# - name: Load Panda DB Schema
+#   shell: cat /data/panda/schema.hql | /opt/hypertable/current/bin/ht shell
 
-- name: Load data into table Count2
-  shell: cat /data/panda/counts2_split_load.hql | /opt/hypertable/current/bin/ht shell
+# - name: Load data A into table Count2
+#   shell: cat /data/panda/counts2_split_load.hql | /opt/hypertable/current/bin/ht shell
 
-- name: Load data into table Count2
-  shell: cat /data/panda/counts2_split_loadb.hql | /opt/hypertable/current/bin/ht shell
+# - name: Load data B into table Count2
+#   shell: cat /data/panda/counts2_split_loadb.hql | /opt/hypertable/current/bin/ht shell
 
-- name: Backup data from table Count2
-  shell: ./backup.sh fp_data counts2 chdir=/data/panda/backup
+# - name: Backup data from table Count2
+#   shell: ./backup.sh fp_data counts2 chdir=/data/panda/backup
+
+- name: Load data into table Doc
+  shell: cat /data/panda/fp_doc_split_load2.hql | /opt/hypertable/current/bin/ht shell
+
+- name: Backup data from Doc
+  shell: ./backup.sh fp_data doc chdir=/data/panda/backup

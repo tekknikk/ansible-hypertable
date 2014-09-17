@@ -61,8 +61,8 @@
 #   shell: gem install capistrano -v 2.9.0
 #   sudo: yes
 
-- name: Download Hypertable vesion 0.9.8
-  get_url: url=http://cdn.hypertable.com/packages/0.9.8.0/hypertable-0.9.8.0-linux-x86_64.rpm dest=/home/hadoop/ owner=hadoop group=hadoop mode=0777
+- name: Download Hypertable vesion {{hypertable_version}}
+  get_url: "url=http://cdn.hypertable.com/packages/{{hypertable_version}}/hypertable-{{hypertable_version}}-linux-x86_64.rpm dest=/home/hadoop/ owner=hadoop group=hadoop mode=0777"
   sudo: yes
 
 # - name: Unarchive Hypertable archive

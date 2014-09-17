@@ -13,7 +13,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda4_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
     - dns
     - nodes_master
@@ -24,7 +24,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda4_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
     - dns
     - ssh
@@ -36,7 +36,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda4_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
     - dns
     - ssh
@@ -48,6 +48,6 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda4_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
     - hypertable

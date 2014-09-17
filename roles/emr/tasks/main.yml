@@ -12,10 +12,10 @@
       emr create-cluster
           --name {{name}}
           --ec2-attributes KeyName={{keyname}},AvailabilityZone=ap-southeast-2a
-          --ami-version 2.4.2
+          --ami-version {{ami_version}}
           --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
           --enable-debugging
-          --log-uri "s3://pandahard/"
+          --log-uri {{log_uri}}
           --applications Name=MapR,Args=--edition,{{mapr_edition}},--version,{{mapr_version}}
           --profile {{profile}}
   register: create_cluster

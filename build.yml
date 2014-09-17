@@ -14,7 +14,8 @@
   gather_facts: false
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
-     build: ./group_vars/build
+  vars_files:
+    - ./group_vars/build
   roles:
     - newrelic
     - dns
@@ -27,7 +28,8 @@
   gather_facts: false
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
-     build: ./group_vars/build
+  vars_files:
+    - ./group_vars/build
   roles:
     - newrelic
     - dns
@@ -41,7 +43,8 @@
   gather_facts: false
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
-     build: ./group_vars/build
+  vars_files:
+    - ./group_vars/build
   roles:
     - newrelic
     - dns
@@ -55,5 +58,7 @@
   gather_facts: false
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
+  vars_files:
+    - ./group_vars/build
   roles:
     - hypertable

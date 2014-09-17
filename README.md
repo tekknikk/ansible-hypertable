@@ -25,7 +25,13 @@ Notes: Creates namespace, loads schema, loads table and then backs it up.
 
 Playbook: Load all data into hypertable
 Command: ansible-playbook -v -i panda.hosts load.yml
-Notes:  This takes hours.
+Notes:  Uses an ebs attached mount where import scripts and data live.  Import takes hours.
+        Mount point: /data
+        Path to scripts: /data/panda
+        Import script template: $table_name.load.hql
+        Path to data: /data/panda
+        Data template: ???
+      
 
 Playbook: Backup all data from hypertable
 Command: ansible-playbook -v -i panda.hosts backup.yml
@@ -42,6 +48,10 @@ If you don't have a newrelic key or don't want to use newrelic, then comment out
 
 3) Build variable: keyname
 This key needs to already exist.  Enter just the name and do not include the .pem file extension.
+
+TODO
+1) Describe build variables
+2) Use cluster hosts vars in Capfile.user_config.json.j2
 
 
 

@@ -6,7 +6,7 @@
     module: aws_cli
     commandline: >
       ec2 attach-volume
-          --volume-id vol-e1141fe5
+          --volume-id {{data}}
           --instance-id {{masters[0].id}}
           --device /dev/xvdf
           --profile {{profile}}

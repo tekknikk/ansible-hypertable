@@ -1,9 +1,0 @@
-[masters]
-54.252.2.122 ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
-
-[cores]
-54.252.69.233 ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
-
-[tasks]
-54.79.130.243 ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem
-54.252.33.186 ansible_connection=ssh ansible_ssh_user=hadoop ansible_ssh_private_key_file=/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem

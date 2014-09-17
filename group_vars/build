@@ -1,6 +1,6 @@
 ---
 profile: usp
-name: panda
+name: panda2
 keyname: pandahard
 type: m1.large
 masters: 1

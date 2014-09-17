@@ -11,7 +11,7 @@
     commandline: >
       emr create-cluster
           --name {{name}}
-          --ec2-attributes KeyName={{keyname}}
+          --ec2-attributes KeyName={{keyname}},AvailabilityZone=ap-southeast-2a
           --ami-version 2.4.2
           --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
           --enable-debugging

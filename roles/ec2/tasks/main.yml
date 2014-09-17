@@ -5,10 +5,10 @@
     commandline: >
       ec2 attach-volume
           --volume-id vol-32482736
-          --instance-id {{masters[0].InstanceID ??? }}
-          --device /dev/xvdg
+          --instance-id {{  masters[0].InstanceID ??? }}
+          --device /dev/xvdf
           --profile {{profile}}
-  register: create_cluster
-- debug: var=create_cluster
+  register: attach_volume
+- debug: var=attach_volume
   tags:
     - debug

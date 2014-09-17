@@ -1,24 +1,32 @@
-# 1) create database
-# 2)load schema
-# 3) load table data
-# 4) backup table
+# 1) drop namespace and tables before starting - remove prevoious tests
 ---
+- name: Check if test dir exists
+  stat: path=/home/hadoop/test
+  register: test_path
 
-# TODO: if test_dir then do not create
-- name: Create directory for test_data files
+- name: Create directory for test files
   file: path=/home/hadoop/test owner=hadoop group=hadoop state=directory recurse=yes
+  when: test_path.stat.exists == false
 
-# TODO: if test_dir then do not copy archive
 - name: Unarchive DATA files to master1
   unarchive:
     src: counts1.tar.gz
     dest: /home/hadoop/test
+  when: test_path.stat.exists == false
 
 - name: Load Panda DB Schema
   shell: cat /home/hadoop/test/counts1/schema.hql | /opt/hypertable/current/bin/ht shell
 
-- name: Load data into Count1 table
+- name: Load data into table Count1
   shell: cat /home/hadoop/test/counts1/count1_load.hql | /opt/hypertable/current/bin/ht shell
 
-#- name: Backup table xxx
-#  shell:
+- name: Copy backup script
+  copy:
+    src: backup.sh
+    dest: /home/hadoop/test/backup.sh
+    owner: hadoop
+    group: hadoop
+    mode: 0777
+
+- name: Backup data from table Count1
+  shell: /home/hadoop/test/backup.sh data_test counts1

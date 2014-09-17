@@ -19,6 +19,13 @@
 - name: Copying Hypertable binaries to cluster nodes
   shell: cap push_config
 
-- name: Start Hypertable!
-  shell: cap start
+- name: Start hyperspace
+  shell: cap start_hypersapce
 
+# TODO: Master starts HOWEVER errors out because monitoring fails to start
+- name: Start master
+  shell: cap start_master
+  ignore_errors: yes
+
+- name: Start slaves
+  shell: cap start_slaves

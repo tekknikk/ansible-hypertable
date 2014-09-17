@@ -25,8 +25,32 @@
     version: 2.9.0
     state: present
 
-- name: Update hadoop user shell with cap binary path
+- name: Install sinatra gem
+  gem:
+    name: sinatra
+    state: present
 
+- name: Install rack gem
+  gem:
+    name: rack
+    state: present
+
+- name: Install thin gem
+  gem:
+    name: thin
+    state: present
+
+- name: Install json gem
+  gem:
+    name: json
+    state: present
+
+- name: Install titleize gem
+  gem:
+    name: titleize
+    state: present
+
+- name: Update hadoop user shell with cap binary path
   sudo: no
   lineinfile:
     dest: /home/hadoop/.bashrc

@@ -1,3 +1,5 @@
+# aws ec2 detach-volume --volume-id vol-e1141fe5 --profile usp --force
+# sudo umount /dev/xvdf
 ---
 - name: Attach data ebs volume to master1
   local_action:

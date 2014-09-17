@@ -9,4 +9,4 @@
      profile: usp
   roles:
     - ec2
- #   - load
+    - load

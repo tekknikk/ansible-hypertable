@@ -5,23 +5,23 @@
   local_action: >
     shell export ANSIBLE_HOST_KEY_CHECKING=False
 
-# - name: Create EMR Cluster and register it's ID 
-#   local_action:
-#     module: aws_cli
-#     commandline: >
-#       emr create-cluster
-#           --name {{name}}
-#           --ec2-attributes KeyName={{keyname}},AvailabilityZone=ap-southeast-2a
-#           --ami-version {{ami_version}}
-#           --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
-#           --enable-debugging
-#           --log-uri {{log_uri}}
-#           --applications Name=MapR,Args=--edition,{{mapr_edition}},--version,{{mapr_version}}
-#           --profile {{profile}}
-#   register: create_cluster
-# - debug: var=create_cluster
-#   tags:
-#     - debug
+- name: Create EMR Cluster and register it's ID 
+  local_action:
+    module: aws_cli
+    commandline: >
+      emr create-cluster
+          --name {{name}}
+          --ec2-attributes KeyName={{keyname}},AvailabilityZone=ap-southeast-2a
+          --ami-version {{ami_version}}
+          --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
+          --enable-debugging
+          --log-uri {{log_uri}}
+          --applications Name=MapR,Args=--edition,{{mapr_edition}},--version,{{mapr_version}}
+          --profile {{profile}}
+  register: create_cluster
+- debug: var=create_cluster
+  tags:
+    - debug
 
 # --cluster-id create_cluster.ClusterId
 - name: Wait for EMR Cluster to start
@@ -29,7 +29,7 @@
     module: aws_cli
     commandline: >
       emr describe-cluster
-           --cluster-id j-1QZ9PNYX2W6WH
+           --cluster-id {{create_cluster.ClusterId}}
            --profile {{profile}}
   register: describe_cluster
   ignore_errors: true
@@ -43,7 +43,7 @@
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-1QZ9PNYX2W6WH
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types MASTER
            --profile {{profile}}
   register: masters
@@ -56,7 +56,7 @@
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-1QZ9PNYX2W6WH
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types CORE
            --profile {{profile}}
   register: cores
@@ -69,7 +69,7 @@
     module: aws_cli
     commandline: >
       emr list-instances
-           --cluster-id j-1QZ9PNYX2W6WH
+           --cluster-id {{create_cluster.ClusterId}}
            --instance-group-types TASK
            --profile {{profile}}
   register: tasks

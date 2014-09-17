@@ -8,5 +8,5 @@
      masters: "{{ lookup('file', './panda6_masters') }}"
      profile: usp
   roles:
- #   - ec2
+    - ec2
     - load

@@ -15,6 +15,7 @@
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
+    - newrelic
     - dns
     - nodes_master
 
@@ -26,6 +27,7 @@
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
+    - newrelic
     - dns
     - ssh
     - nodes_core
@@ -38,6 +40,7 @@
   vars:
      etc_hosts: "{{ lookup('file', './panda6_etc_hosts') }}"
   roles:
+    - newrelic
     - dns
     - ssh
     - nodes_task

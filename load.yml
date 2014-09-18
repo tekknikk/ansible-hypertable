@@ -5,8 +5,9 @@
   sudo: false
   gather_facts: false
   vars:
-     masters: "{{ lookup('file', './panda6_masters') }}"
-     profile: usp
+     masters: "{{ lookup('file', './panda_masters') }}"
+  vars_files:
+    - ./group_vars/build
   roles:
     - ec2
     - load

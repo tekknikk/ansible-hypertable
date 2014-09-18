@@ -1,11 +1,11 @@
 ---
 profile: usp
-name: panda2
+name: panda3T2
 keyname: pandahard
 type: m1.large
 masters: 1
 cores: 1
-tasks: 2
+tasks: 3
 log_uri: s3://pandahard/
 mapr_edition: m3
 mapr_version: 3.1.1

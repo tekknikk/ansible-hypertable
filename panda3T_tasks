@@ -1,0 +1,29 @@
+[
+{
+    "private_dns_name": "task1",
+    "id": "i-94e56faa",
+    "private_dns": "ip-10-240-56-34.ap-southeast-2.compute.internal",
+    "private_ip": "10.240.56.34",
+    "public_dns": "ec2-54-206-207-53.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.206.207.53",
+    "status": "RUNNING"
+}
+{
+    "private_dns_name": "task2",
+    "id": "i-95e56fab",
+    "private_dns": "ip-10-240-58-181.ap-southeast-2.compute.internal",
+    "private_ip": "10.240.58.181",
+    "public_dns": "ec2-54-253-166-129.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.253.166.129",
+    "status": "RUNNING"
+}
+{
+    "private_dns_name": "task3",
+    "id": "i-96e56fa8",
+    "private_dns": "ip-10-240-17-106.ap-southeast-2.compute.internal",
+    "private_ip": "10.240.17.106",
+    "public_dns": "ec2-54-252-30-4.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.252.30.4",
+    "status": "RUNNING"
+}
+]

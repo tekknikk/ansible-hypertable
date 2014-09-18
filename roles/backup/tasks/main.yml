@@ -1,0 +1,15 @@
+---
+- name: Backup table counts1
+  shell: ./backup.sh fp_data counts1 chdir=/data/panda/backup
+
+- name: Backup table jointcount
+  shell: ./backup.sh fp_data jointcount chdir=/data/panda/backup
+
+- name: Backup table doc
+  shell: ./backup.sh fp_data doc chdir=/data/panda/backup
+
+- name: Backup table concept
+  shell: ./backup.sh fp_data concept chdir=/data/panda/backup
+
+- name: Backup table counts2
+  shell: ./backup.sh fp_data counts2 chdir=/data/panda/backup

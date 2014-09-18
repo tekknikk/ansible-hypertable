@@ -1,6 +1,15 @@
 # aws ec2 detach-volume --volume-id vol-e1141fe5 --profile usp --force
 # sudo umount /dev/xvdf
 ---
+- debug: var=data
+  tags:
+    - debug
+- debug: var=master[0].id
+  tags:
+    - debug
+- debug: var=profile
+  tags:
+    - debug
 - name: Attach data ebs volume to master1
   local_action:
     module: aws_cli

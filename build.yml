@@ -13,7 +13,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
@@ -28,7 +28,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
@@ -44,7 +44,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
@@ -60,7 +60,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:

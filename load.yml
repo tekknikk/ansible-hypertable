@@ -5,7 +5,7 @@
   sudo: false
   gather_facts: false
   vars:
-     masters: "{{ lookup('file', './panda_masters') }}"
+     master: "{{ lookup('file', './panda_masters') }}"
   vars_files:
     - ./group_vars/build
   roles:

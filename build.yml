@@ -13,12 +13,13 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
     - newrelic
     - dns
+    - nodes
     - nodes_master
 
 - name: Configure each CORE Node for Hypertable
@@ -27,13 +28,14 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
     - newrelic
     - dns
     - ssh
+    - nodes
     - nodes_core
 
 - name: Configure each CORE Node for Hypertable
@@ -42,13 +44,14 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:
     - newrelic
     - dns
     - ssh
+    - nodes
     - nodes_task
 
 - name: Build Hypertable on Master1
@@ -57,7 +60,7 @@
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+     etc_hosts: "{{ lookup('file', './panda2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:

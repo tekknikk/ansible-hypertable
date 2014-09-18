@@ -162,3 +162,19 @@
 - debug: var=authorize_ssh
   tags:
     - debug
+
+- name: Enable TCP 15860 for Monitoring but ignore error if exists
+  ignore_errors: yes
+  local_action:
+    module: aws_cli
+    commandline: >
+      ec2 authorize-security-group-ingress
+           --group-name ElasticMapReduce-master
+           --protocol tcp
+           --port 15860
+           --cidr 0.0.0.0/0
+           --profile {{profile}}
+  register: authorize_ssh
+- debug: var=authorize_ssh
+  tags:
+    - debug

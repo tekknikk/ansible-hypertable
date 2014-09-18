@@ -2,15 +2,3 @@
 - name: Set vm.swappiness=0
   shell: sysctl -w vm.swappiness=0
   sudo: yes
-
-- name: Create Hypertable Directory /etc/opt/hypertable
-  file: path=/etc/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
-  sudo: yes
-
-- name: Create Hypertable Directory /var/opt/hypertable
-  file: path=/var/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
-  sudo: yes
-
-- name: Create Hypertable Directory /opt/hypertable
-  file: path=/opt/hypertable owner=hadoop group=hadoop state=directory recurse=yes
-  sudo: yes

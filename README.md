@@ -37,6 +37,9 @@ Playbook: Backup all data from hypertable
 Command: ansible-playbook -v -i panda.hosts backup.yml
 Notes:  This takes hours.
 
+4) Monitoring
+Hypertable Monitoring @ panda_masters[0].public_ip:15860
+NewRelic available if you entered a licence or used mine.
 
 
 FAQ

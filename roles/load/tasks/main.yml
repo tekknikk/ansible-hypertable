@@ -1,23 +1,18 @@
+---
 - name: Load Panda DB Schema
-  shell: cat /data/panda/schema.hql | /opt/hypertable/current/bin/ht shell
+  shell: cat /data/panda/source/schema.hql | /opt/hypertable/current/bin/ht shell
+
+- name: Load data into table counts1
+  shell: cat /data/panda/source/counts1/load.hql | /opt/hypertable/current/bin/ht shell
+
+- name: Load data into table jointcount
+  shell: cat /data/panda/source/counts1/load.hql | /opt/hypertable/current/bin/ht shell
 
 - name: Load data into table doc
-  shell: cat /data/panda/fp_doc_split_load2.hql | /opt/hypertable/current/bin/ht shell
+  shell: cat /data/panda/source/doc/load.hql | /opt/hypertable/current/bin/ht shell
 
-- name: Backup data from doc
-  shell: ./backup.sh fp_data doc chdir=/data/panda/backup
+- name: Load data into table counts2
+  shell: cat /data/panda/source/counts2/load.hql | /opt/hypertable/current/bin/ht shell
 
 - name: Load data into table concept
-  shell: cat /data/panda/concept_load.hql | /opt/hypertable/current/bin/ht shell
-
-- name: Backup data from concept
-  shell: ./backup.sh fp_data concept chdir=/data/panda/backup
-
-- name: Load data A into table Count2
-  shell: cat /data/panda/counts2_split_load.hql | /opt/hypertable/current/bin/ht shell
-
-- name: Load data B into table Count2
-  shell: cat /data/panda/counts2_split_loadb.hql | /opt/hypertable/current/bin/ht shell
-
-- name: Backup data from table Count2
-  shell: ./backup.sh fp_data counts2 chdir=/data/panda/backup
+  shell: cat /data/panda/source/concept/load.hql | /opt/hypertable/current/bin/ht shell

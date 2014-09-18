@@ -7,7 +7,7 @@
     commandline: >
       ec2 attach-volume
           --volume-id {{data}}
-          --instance-id {{masters[0].id}}
+          --instance-id {{master[0].id}}
           --device /dev/xvdf
           --profile {{profile}}
   register: attach_volume

@@ -6,7 +6,7 @@
   shell: cat /data/panda/source/counts1/load.hql | /opt/hypertable/current/bin/ht shell
 
 - name: Load data into table jointcount
-  shell: cat /data/panda/source/counts1/load.hql | /opt/hypertable/current/bin/ht shell
+  shell: cat /data/panda/source/jointcount/load.hql | /opt/hypertable/current/bin/ht shell
 
 - name: Load data into table doc
   shell: cat /data/panda/source/doc/load.hql | /opt/hypertable/current/bin/ht shell

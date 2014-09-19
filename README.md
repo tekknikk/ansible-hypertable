@@ -5,13 +5,22 @@ A delicious hypertable build with aws emr and mapr.  Configurable.
 
 INSTRUCTIONS:
 1) Set up your build environment:
+
+Install AWS CLI
+Configure AWS CLI with a profile
+
 Install Ansible
 shell source ansible env
 shell export ANSIBLE_HOST_KEY_CHECKING=False
 
+Ansible needs Jinja2
+apt-get install python-jinja2 
+
+If old ssh like 5.5
+shell export ANSIBLE_SSH_ARGS=""
+
 
 2) Edit build vars in /group_vars/build
-
 
 3) Hypertable Playbooks
 
@@ -54,7 +63,8 @@ This key needs to already exist.  Enter just the name and do not include the .pe
 
 TODO
 1) Describe build variables
-2) Templatize file Capfile.user_config.json.j2
+2) Templatize file Capfile.user_config.json.j2 WIP
+3) Create and save security key. reove from build var list suppied by user.
 
 
 

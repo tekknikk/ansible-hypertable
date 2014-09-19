@@ -8,4 +8,4 @@ set :default_config, "/opt/hypertable/hypertable.cfg"
 role :source, "master1"
 role :master, "master1"
 role :hyperspace, "core1"
-role :slave{% for item in tasks.Instances %}{, "{{item.private_dns_name"}{% endfor %}
+role :slave{% for item in node_tasks.Instances %}{, "{{item.private_dns_name"}}{% endfor %}

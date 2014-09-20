@@ -1,0 +1,11 @@
+[
+{
+    "private_dns_name": "master1",
+    "id": "i-88860cb6",
+    "private_dns": "ip-10-240-97-149.ap-southeast-2.compute.internal",
+    "private_ip": "10.240.97.149",
+    "public_dns": "ec2-54-253-131-51.ap-southeast-2.compute.amazonaws.com",
+    "public_ip": "54.253.131.51",
+    "status": "RUNNING"
+}
+]

@@ -1,0 +1,13 @@
+set :install_dir,  "/opt/hypertable"
+set :hypertable_version, "{{hypertable_version}}"
+set :default_pkg, "/home/hadoop/hypertable-{{hypertable_version}}-linux-x86_64.rpm"
+set :default_fs, "mapr"
+set :default_distro, "cdh4"
+set :default_config, "/opt/hypertable/hypertable.cfg"
+
+role :source, "masters1"
+role :master, "master1"
+
+role :hyperspace{% for item in tasks.Instances %}, "core{{loop.index}}"{% endfor %}
+
+role :slave{% for item in tasks.Instances %}, "task{{loop.index}}"{% endfor %}

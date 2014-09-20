@@ -1,7 +1,7 @@
 ---
 profile: usp
 name: panda3T2
-keyname: pandahard
+key_name: pandahard
 type: m1.large
 masters: 1
 cores: 1

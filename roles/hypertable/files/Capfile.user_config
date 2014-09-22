@@ -5,8 +5,8 @@ set :default_fs, "mapr"
 set :default_distro, "cdh4"
 set :default_config, "/opt/hypertable/hypertable.cfg"
 
-role :source, "masters1"
+role :source, "master1"
 role :master, "master1"
 
-role :hyperspace, "core1", "core2", "core3"
+role :hyperspace, "core1"
 role :slave, "task1", "task2", "task3"

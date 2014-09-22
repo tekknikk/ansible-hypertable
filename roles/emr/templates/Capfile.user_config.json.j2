@@ -5,9 +5,9 @@ set :default_fs, "mapr"
 set :default_distro, "cdh4"
 set :default_config, "/opt/hypertable/hypertable.cfg"
 
-role :source, "masters1"
+role :source, "master1"
 role :master, "master1"
 
-role :hyperspace{% for item in tasks.Instances %}, "core{{loop.index}}"{% endfor %}
+role :hyperspace{% for item in cores.Instances %}, "core{{loop.index}}"{% endfor %}
 
 role :slave{% for item in tasks.Instances %}, "task{{loop.index}}"{% endfor %}

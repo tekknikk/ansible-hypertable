@@ -12,13 +12,12 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
+    - ./panda
   roles:
-    - newrelic
     - dns
+    - newrelic
     - nodes
     - nodes_master
 
@@ -27,10 +26,9 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
+    - ./panda
   roles:
     - newrelic
     - dns
@@ -43,10 +41,9 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
+    - ./panda
   roles:
     - newrelic
     - dns
@@ -59,8 +56,6 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     etc_hosts: "{{ lookup('file', './panda3T2_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:

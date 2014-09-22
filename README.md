@@ -58,13 +58,9 @@ For maximum ansible debug verbosity use "-vvvv".  The more v's, the more debug o
 2) Newrelic.
 If you don't have a newrelic key or don't want to use newrelic, then comment out the new relic roles in /build.yml on lines 18, 30 and 43.
 
-3) Build variable: keyname
-This key needs to already exist.  Enter just the name and do not include the .pem file extension.
 
 TODO
 1) Describe build variables
-2) Templatize file Capfile.user_config.json.j2 WIP
-3) Create and save security key. reove from build var list suppied by user.
 
 
 

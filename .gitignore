@@ -1,4 +1,4 @@
 .DS_Store
-roles/ssh/files/id_rsa
+roles/ssh/files/*
 builds/*
-panda
+id

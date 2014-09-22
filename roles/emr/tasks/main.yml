@@ -11,7 +11,7 @@
   local_action:
     module: template
     src: id.json.j2
-    dest: "./{{name}}"
+    dest: "./id"
 
 - name: Turn off ansible host checking on local
   sudo: no

@@ -9,5 +9,5 @@
   vars_files:
     - ./group_vars/build
   roles:
-#    - ec2
+    - ec2
     - load

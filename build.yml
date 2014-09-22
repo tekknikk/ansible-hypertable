@@ -12,9 +12,10 @@
   user: hadoop
   sudo: false
   gather_facts: false
+  vars:
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
-    - ./panda
   roles:
     - dns
     - newrelic
@@ -26,9 +27,10 @@
   user: hadoop
   sudo: false
   gather_facts: false
+  vars:
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
-    - ./panda
   roles:
     - newrelic
     - dns
@@ -41,9 +43,10 @@
   user: hadoop
   sudo: false
   gather_facts: false
+  vars:
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
-    - ./panda
   roles:
     - newrelic
     - dns

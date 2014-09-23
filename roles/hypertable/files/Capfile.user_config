@@ -7,5 +7,6 @@ set :default_config, "/opt/hypertable/hypertable.cfg"
 
 role :source, "master1"
 role :master, "master1"
+
 role :hyperspace, "core1"
-role :slave, "task1", "task2"
+role :slave, "task1", "task2", "task3"

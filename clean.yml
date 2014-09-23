@@ -1,5 +1,5 @@
 ---
-- name: Load ALL FP data from ebs mount
+- name: Cleaning hypertable and DELETE ALL THE DATA
   hosts: masters
   user: hadoop
   sudo: false
@@ -9,5 +9,4 @@
   vars_files:
     - ./group_vars/build
   roles:
-    - data
-    - load
+    - clean

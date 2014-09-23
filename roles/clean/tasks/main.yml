@@ -1,0 +1,10 @@
+---
+- name: Stop Hypertable
+  shell: cap stop
+
+# Capfile changed to support cleandb without prompt
+- name: Clean Hypertable DB - Wipe All data!
+  shell: cap cleandb
+
+- name: Start Hypertable
+  shell: cap start

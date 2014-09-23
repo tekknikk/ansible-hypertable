@@ -1,0 +1,23 @@
+# TODO add build ID to backup folder
+---
+- name: Copy backup script to master1
+  copy:
+    src: backup.sh
+    dest: /data/panda/backup
+    owner: hadoop
+    group: hadoop
+
+- name: Backup table counts1
+  shell: /data/panda/backup/backup.sh fp_data counts1 chdir=/data/panda/backup
+
+- name: Backup table jointcount
+  shell: /data/panda/backup/backup.sh fp_data jointcount chdir=/data/panda/backup
+
+- name: Backup table doc
+  shell: /data/panda/backup/backup.sh fp_data doc chdir=/data/panda/backup
+
+- name: Backup table concept
+  shell: /data/panda/backup/backup.sh fp_data concept chdir=/data/panda/backup
+
+- name: Backup table counts2
+  shell: /data/panda/backup/backup.sh fp_data counts2 chdir=/data/panda/backup

@@ -1,9 +1,41 @@
 # TODO: need following tasks:  check cluster build status until "waiting" then get roles and ip address's.  need to parse json from aws cli.
 ---
+- name: Get the ISO date to use as Build ID
+  local_action: shell date +%Y%m%dT%H%M
+  register: id
+- debug: var=id
+  tags:
+    - debug
+
+- name: Save Build ID
+  local_action:
+    module: template
+    src: id.json.j2
+    dest: "./id"
+
 - name: Turn off ansible host checking on local
   sudo: no
   local_action: >
     shell export ANSIBLE_HOST_KEY_CHECKING=False
+
+- name: Create key pair
+  local_action:
+    module: aws_cli
+    commandline: >
+      ec2 create-key-pair
+          --key-name {{name}}_{{id.stdout}}
+          --profile {{profile}}
+  register: create_key_pair
+- debug: var=create_key_pair
+  tags:
+    - debug
+
+- name: Save Key to roles/ssh/files
+  local_action:
+    module: template
+    src: key.json.j2
+    dest: "./roles/ssh/files/{{create_key_pair.KeyName}}"
+    mode: 0600
 
 - name: Create EMR Cluster and register it's ID 
   local_action:
@@ -11,7 +43,7 @@
     commandline: >
       emr create-cluster
           --name {{name}}
-          --ec2-attributes KeyName={{keyname}},AvailabilityZone=ap-southeast-2a
+          --ec2-attributes KeyName={{create_key_pair.KeyName}},AvailabilityZone=ap-southeast-2a
           --ami-version {{ami_version}}
           --instance-groups InstanceGroupType=MASTER,InstanceCount={{masters}},InstanceType={{type}} InstanceGroupType=CORE,InstanceCount={{cores}},InstanceType={{type}} InstanceGroupType=TASK,InstanceCount={{tasks}},InstanceType={{type}}
           --enable-debugging
@@ -24,6 +56,7 @@
     - debug
 
 # --cluster-id create_cluster.ClusterId
+# TODO test for other cluster status to fail.
 - name: Wait for EMR Cluster to start
   local_action:
     module: aws_cli
@@ -77,35 +110,54 @@
   tags:
     - debug
 
+- name: Create folder for ouput of build files
+  local_action:
+    module: file
+    path: "./builds/{{id.stdout}}"
+    state: directory
+    recurse: yes
+
 - name: Store ansible host file for cluster public IP's
   local_action:
     module: template
     src: public_ip.json.j2
-    dest: "./{{name}}.hosts"
+    dest: "./builds/{{id.stdout}}/{{name}}.hosts"
 
 - name: Store clusters private IP's for updating each nodes /etc/hosts
   local_action:
     module: template
     src: private_ip.json.j2
-    dest: "./{{name}}_etc_hosts"
+    dest: "./builds/{{id.stdout}}/{{name}}_etc_hosts"
+
+- name: Store master1 ec2 ID
+  local_action:
+    module: template
+    src: master1_ec2_id.json.j2
+    dest: "./builds/{{id.stdout}}/{{name}}_master1_ec2_id"
 
 - name: Store MASTERS var
   local_action:
     module: template
     src: cluster_masters.json.j2
-    dest: "./{{name}}_masters"
+    dest: "./builds/{{id.stdout}}/{{name}}_masters"
 
 - name: Store CORES var
   local_action:
     module: template
     src: cluster_cores.json.j2
-    dest: "./{{name}}_cores"
+    dest: "./builds/{{id.stdout}}/{{name}}_cores"
 
 - name: Store TASKS var
   local_action:
     module: template
     src: cluster_tasks.json.j2
-    dest: "./{{name}}_tasks"
+    dest: "./builds/{{id.stdout}}/{{name}}_tasks"
+
+- name: Build user configs section of Capfile
+  local_action:
+    module: template
+    src: Capfile.user_config.json.j2
+    dest: "./roles/hypertable/files/Capfile.user_config"
 
 - name: Add first MASTER (master1) public IP to host group @cluster_master
   local_action:
@@ -114,7 +166,7 @@
     hostname: "{{masters.Instances[0].PublicIpAddress}}"
     ansible_connection: ssh
     ansible_ssh_user: "hadoop"
-    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+    ansible_ssh_private_key_file: "./roles/ssh/files/{{create_key_pair.KeyName}}"
 
 - name: Add MASTER public IPs to host group @cluster_masters
   local_action:
@@ -123,7 +175,7 @@
     hostname: "{{item.PublicIpAddress}}"
     ansible_connection: ssh
     ansible_ssh_user: "hadoop"
-    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+    ansible_ssh_private_key_file: "./roles/ssh/files/{{create_key_pair.KeyName}}"
   with_items: masters.Instances
 
 - name: Add CORE public IPs to host group @cluster_cores
@@ -133,7 +185,7 @@
     hostname: "{{cores.Instances[0].PublicIpAddress}}"
     ansible_connection: ssh
     ansible_ssh_user: "hadoop"
-    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+    ansible_ssh_private_key_file: "./roles/ssh/files/{{create_key_pair.KeyName}}"
   with_items: cores.Instances
 
 - name: Add TASK public IP to host group @cluster_tasks
@@ -143,11 +195,10 @@
     hostname: "{{item.PublicIpAddress}}"
     ansible_connection: ssh
     ansible_ssh_user: "hadoop"
-    ansible_ssh_private_key_file: "/Users/teknik/Dropbox/p7/fairfax/sec/pandahard.pem"
+    ansible_ssh_private_key_file: "./roles/ssh/files/{{create_key_pair.KeyName}}"
   with_items: tasks.Instances
 
-
-- name: Enable SSH access to CORES but ignore error if exists
+- name: Enable SSH access to CORES and TASKS but ignore error if exists
   ignore_errors: yes
   local_action:
     module: aws_cli
@@ -162,3 +213,20 @@
 - debug: var=authorize_ssh
   tags:
     - debug
+
+- name: Enable TCP 15860 to MASTER for Monitoring but ignore error if exists
+  ignore_errors: yes
+  local_action:
+    module: aws_cli
+    commandline: >
+      ec2 authorize-security-group-ingress
+           --group-name ElasticMapReduce-master
+           --protocol tcp
+           --port 15860
+           --cidr 0.0.0.0/0
+           --profile {{profile}}
+  register: authorize_ssh
+- debug: var=authorize_ssh
+  tags:
+    - debug
+

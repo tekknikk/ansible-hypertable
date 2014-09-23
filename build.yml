@@ -5,50 +5,53 @@
   sudo: false
   gather_facts: false
   roles:
-    - emr
+    - build
 
-- name: Configure each Master Node for Hypertable
+- name: Configure each Master Node
   hosts: cluster_master
   user: hadoop
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
   roles:
-    - newrelic
     - dns
+    - newrelic
+    - nodes
     - nodes_master
 
-- name: Configure each CORE Node for Hypertable
+- name: Configure each CORE Node
   hosts: cluster_cores
   user: hadoop
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
   roles:
     - newrelic
     - dns
     - ssh
+    - nodes
     - nodes_core
 
-- name: Configure each CORE Node for Hypertable
+- name: Configure each TASK Node
   hosts: cluster_tasks
   user: hadoop
   sudo: false
   gather_facts: false
   vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
+    id: "{{ lookup('file', './id') }}"
   vars_files:
     - ./group_vars/build
   roles:
     - newrelic
     - dns
     - ssh
+    - nodes
     - nodes_task
 
 - name: Build Hypertable on Master1
@@ -56,8 +59,6 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     etc_hosts: "{{ lookup('file', './panda_etc_hosts') }}"
   vars_files:
     - ./group_vars/build
   roles:

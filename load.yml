@@ -4,10 +4,8 @@
   user: hadoop
   sudo: false
   gather_facts: false
-  vars:
-     master: "{{ lookup('file', './panda3T_masters') }}"
   vars_files:
     - ./group_vars/build
   roles:
-    - ec2
+    - data
     - load

@@ -29,7 +29,7 @@ A delicious hypertable build with aws emr and mapr.  Configurable.
 - newrelic: 9910108157933df624056a0f5c26f19df6090a28
 
 ### 3. Hypertable Playbooks
-Commands are run @ from app root.
+Commands are run from app root.
 
 #### Playbook: Build hypertable
 - Command: ansible-playbook -v -i build build.yml

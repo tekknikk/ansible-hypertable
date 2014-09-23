@@ -1,12 +1,22 @@
 # aws ec2 detach-volume --volume-id vol-e1141fe5 --profile usp --force
 # sudo umount /dev/xvdf
 ---
+
+- debug: var=id
+  tags:
+    - debug
+
+- name: Get the ec2 id of master1
+  local_action: "shell cat ./builds/{{id}}/{{name}}_master1_ec2_id"
+  register: master_ec2_id
+- debug: var=master_ec2_id.stdout
+  tags:
+    - debug
+
 - debug: var=data
   tags:
     - debug
-- debug: var=master[0].id
-  tags:
-    - debug
+
 - debug: var=profile
   tags:
     - debug
@@ -16,7 +26,7 @@
     commandline: >
       ec2 attach-volume
           --volume-id {{data}}
-          --instance-id {{master[0].id}}
+          --instance-id {{master_ec2_id.stdout}}
           --device /dev/xvdf
           --profile {{profile}}
   register: attach_volume

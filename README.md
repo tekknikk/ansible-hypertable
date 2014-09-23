@@ -29,29 +29,30 @@ A delicious hypertable build with aws emr and mapr.  Configurable.
 - newrelic: 9910108157933df624056a0f5c26f19df6090a28
 
 ### 3. Hypertable Playbooks
+Commands are run @ from app root.
 
 #### Playbook: Build hypertable
 - Command: ansible-playbook -v -i build build.yml
 - Notes: Build can take 20+ mins depending upon cluster size.
 
-#### Playbook: Test hypertable
-- Command: ansible-playbook -v -i panda.hosts test.yml
+#### Playbook: Test hypertable build
+- Command: ansible-playbook -v -i builds/{{id}}/{{name}}.hosts test.yml
 - Notes: Creates namespace, loads schema, loads table and then backs it up.
 
 #### Playbook: Load all data
-- Command: ansible-playbook -v -i panda.hosts load.yml
+- Command: ansible-playbook -v -i builds/{{id}}/{{name}}.hosts load.yml
 - Notes:  Uses an ebs attached mount where import scripts and data live.
     Mount point: /data
     Path to data: /data/panda/source/$table_name
     Path to scripts: /data/panda/source/$table_name/load.hql
     
 #### Playbook: Backup all data
-- Command: ansible-playbook -v -i panda.hosts backup.yml
+- Command: ansible-playbook -v -i builds/{{id}}/{{name}}.hosts backup.yml
 - Notes:  Uses an ebs attached mount where import scripts and data live.
     Path: /data/panda/backups
 
 #### Playbook: Clean all data
-- Command: ansible-playbook -v -i panda.hosts clean.yml
+- Command: ansible-playbook -v -i builds/{{id}}/{{name}}.hosts clean.yml
 
 ### 4) Monitoring
 - Hypertable Monitoring @ panda_masters[0].public_ip:15860
@@ -59,11 +60,11 @@ A delicious hypertable build with aws emr and mapr.  Configurable.
 
 
 #FAQ
-1. Playbook debuging
+1. How do I increase debug output when running playbooks?
 For maximum ansible debug verbosity use "-vvvv".  The more v's, the more debug output.
 
-2. Newrelic.
-If you don't have a newrelic key or don't want to use newrelic, then comment out the new relic roles in /build.yml on lines 18, 30 and 43.
+2. I don't want to use Newrelic?
+If you don't have a newrelic key or don't want to use newrelic, then comment out the new relic roles in /build.yml on lines 21, 35 & 51.
 
 
 

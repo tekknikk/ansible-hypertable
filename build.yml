@@ -5,7 +5,7 @@
   sudo: false
   gather_facts: false
   roles:
-    - cluster
+    - build
 
 - name: Configure each Master Node
   hosts: cluster_master

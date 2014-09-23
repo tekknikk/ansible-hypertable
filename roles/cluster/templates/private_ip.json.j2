@@ -1,9 +1,0 @@
-{% for item in masters.Instances %}
-{{ item.PrivateIpAddress }} master{{loop.index}}
-{% endfor %}
-{% for item in cores.Instances %}
-{{ item.PrivateIpAddress }} core{{loop.index}}
-{% endfor %}
-{% for item in tasks.Instances %}
-{{ item.PrivateIpAddress }} task{{loop.index}}
-{% endfor %}

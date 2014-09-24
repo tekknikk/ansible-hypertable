@@ -66,6 +66,11 @@ For maximum ansible debug verbosity use "-vvvv".  The more v's, the more debug o
 2. I don't want to use Newrelic?
 If you don't have a newrelic key or don't want to use newrelic, then comment out the new relic roles in /build.yml on lines 21, 35 & 51.
 
+#TODO
+1. Support Ganglia Monitoring
+2. Support Hadoop EMR Builds
+3. Needs more tests
+
 
 
 
